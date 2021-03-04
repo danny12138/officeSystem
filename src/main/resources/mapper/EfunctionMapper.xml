@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.danny.dao.EfunctionMapper">
+  <resultMap id="BaseResultMap" type="com.danny.bean.Efunction">
+    <constructor>
+      <idArg column="fid" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="fcode" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="fname" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="furl" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="flevel" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="fparentid" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="fremark1" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="fremark2" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="fremark3" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    fid, fcode, fname, furl, flevel, fparentid, fremark1, fremark2, fremark3
+  </sql>
+  <select id="selectByExample" parameterType="com.danny.bean.EfunctionExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from efunction
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from efunction
+    where fid = #{fid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from efunction
+    where fid = #{fid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.danny.bean.EfunctionExample">
+    delete from efunction
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.danny.bean.Efunction" useGeneratedKeys="true" keyProperty="fid">
+    insert into efunction (fid, fcode, fname, 
+      furl, flevel, fparentid, 
+      fremark1, fremark2, fremark3
+      )
+    values (default , #{fcode,jdbcType=VARCHAR}, #{fname,jdbcType=VARCHAR},
+      #{furl,jdbcType=VARCHAR}, #{flevel,jdbcType=VARCHAR}, #{fparentid,jdbcType=INTEGER}, 
+      #{fremark1,jdbcType=VARCHAR}, #{fremark2,jdbcType=VARCHAR}, #{fremark3,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.danny.bean.Efunction">
+    insert into efunction
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="fid != null">
+        fid,
+      </if>
+      <if test="fcode != null">
+        fcode,
+      </if>
+      <if test="fname != null">
+        fname,
+      </if>
+      <if test="furl != null">
+        furl,
+      </if>
+      <if test="flevel != null">
+        flevel,
+      </if>
+      <if test="fparentid != null">
+        fparentid,
+      </if>
+      <if test="fremark1 != null">
+        fremark1,
+      </if>
+      <if test="fremark2 != null">
+        fremark2,
+      </if>
+      <if test="fremark3 != null">
+        fremark3,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="fid != null">
+        #{fid,jdbcType=INTEGER},
+      </if>
+      <if test="fcode != null">
+        #{fcode,jdbcType=VARCHAR},
+      </if>
+      <if test="fname != null">
+        #{fname,jdbcType=VARCHAR},
+      </if>
+      <if test="furl != null">
+        #{furl,jdbcType=VARCHAR},
+      </if>
+      <if test="flevel != null">
+        #{flevel,jdbcType=VARCHAR},
+      </if>
+      <if test="fparentid != null">
+        #{fparentid,jdbcType=INTEGER},
+      </if>
+      <if test="fremark1 != null">
+        #{fremark1,jdbcType=VARCHAR},
+      </if>
+      <if test="fremark2 != null">
+        #{fremark2,jdbcType=VARCHAR},
+      </if>
+      <if test="fremark3 != null">
+        #{fremark3,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.danny.bean.EfunctionExample" resultType="java.lang.Long">
+    select count(*) from efunction
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update efunction
+    <set>
+      <if test="record.fid != null">
+        fid = #{record.fid,jdbcType=INTEGER},
+      </if>
+      <if test="record.fcode != null">
+        fcode = #{record.fcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fname != null">
+        fname = #{record.fname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.furl != null">
+        furl = #{record.furl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.flevel != null">
+        flevel = #{record.flevel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fparentid != null">
+        fparentid = #{record.fparentid,jdbcType=INTEGER},
+      </if>
+      <if test="record.fremark1 != null">
+        fremark1 = #{record.fremark1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fremark2 != null">
+        fremark2 = #{record.fremark2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fremark3 != null">
+        fremark3 = #{record.fremark3,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update efunction
+    set fid = #{record.fid,jdbcType=INTEGER},
+      fcode = #{record.fcode,jdbcType=VARCHAR},
+      fname = #{record.fname,jdbcType=VARCHAR},
+      furl = #{record.furl,jdbcType=VARCHAR},
+      flevel = #{record.flevel,jdbcType=VARCHAR},
+      fparentid = #{record.fparentid,jdbcType=INTEGER},
+      fremark1 = #{record.fremark1,jdbcType=VARCHAR},
+      fremark2 = #{record.fremark2,jdbcType=VARCHAR},
+      fremark3 = #{record.fremark3,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.danny.bean.Efunction">
+    update efunction
+    <set>
+      <if test="fcode != null">
+        fcode = #{fcode,jdbcType=VARCHAR},
+      </if>
+      <if test="fname != null">
+        fname = #{fname,jdbcType=VARCHAR},
+      </if>
+      <if test="furl != null">
+        furl = #{furl,jdbcType=VARCHAR},
+      </if>
+      <if test="flevel != null">
+        flevel = #{flevel,jdbcType=VARCHAR},
+      </if>
+      <if test="fparentid != null">
+        fparentid = #{fparentid,jdbcType=INTEGER},
+      </if>
+      <if test="fremark1 != null">
+        fremark1 = #{fremark1,jdbcType=VARCHAR},
+      </if>
+      <if test="fremark2 != null">
+        fremark2 = #{fremark2,jdbcType=VARCHAR},
+      </if>
+      <if test="fremark3 != null">
+        fremark3 = #{fremark3,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where fid = #{fid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.danny.bean.Efunction">
+    update efunction
+    set fcode = #{fcode,jdbcType=VARCHAR},
+      fname = #{fname,jdbcType=VARCHAR},
+      furl = #{furl,jdbcType=VARCHAR},
+      flevel = #{flevel,jdbcType=VARCHAR},
+      fparentid = #{fparentid,jdbcType=INTEGER},
+      fremark1 = #{fremark1,jdbcType=VARCHAR},
+      fremark2 = #{fremark2,jdbcType=VARCHAR},
+      fremark3 = #{fremark3,jdbcType=VARCHAR}
+    where fid = #{fid,jdbcType=INTEGER}
+  </update>
+
+  <select id="findFunctionsByEid" resultMap="BaseResultMap">
+    SELECT DISTINCT f.fid, f.fcode, f.fname, f.furl, f.flevel, f.fparentid, f.fremark1, f.fremark2, f.fremark3 FROM efunction f
+    LEFT JOIN role_function rf ON f.fid = rf.fid
+    LEFT JOIN employee_role er ON rf.rid = er.rid
+    WHERE er.eid = #{eid}
+    ORDER BY f.fid
+  </select>
+
+  <sql id="selectAll">SELECT fid, fcode, fname, furl, flevel, fparentid, fremark1, fremark2, fremark3 FROM efunction</sql>
+
+  <select id="findEfunctionsByCondition" resultMap="BaseResultMap">
+    <include refid="selectAll"/>
+    <where>
+      <if test="fcode!=null">
+        fcode like concat('%',#{fcode},'%')
+      </if>
+      <if test="fname!=null">
+        and fname like concat('%',#{fname},'%')
+      </if>
+      <if test="furl!=null">
+        and furl like concat('%',#{furl},'%')
+      </if>
+      <if test="flevel!=-1">
+        and flevel like concat('%',#{flevel},'%')
+      </if>
+      <if test="fparentid!=null">
+        and fparentid like concat('%',#{fparentid},'%')
+      </if>
+      order by ${sortField} ${sortOrder}
+      <if test="pageSize!=-1">
+        limit #{pageIndex},#{pageSize}
+      </if>
+    </where>
+  </select>
+
+  <select id="countEfunctionsByCondition" resultType="_int">
+    SELECT count(fid) FROM efunction
+    <where>
+      <if test="fcode!=null">
+        fcode like concat('%',#{fcode},'%')
+      </if>
+      <if test="fname!=null">
+        and fname like concat('%',#{fname},'%')
+      </if>
+      <if test="furl!=null">
+        and furl like concat('%',#{furl},'%')
+      </if>
+      <if test="flevel!=null">
+        and flevel like concat('%',#{flevel},'%')
+      </if>
+      <if test="fparentid!=null">
+        and fparentid like concat('%',#{fparentid},'%')
+      </if>
+    </where>
+  </select>
+
+  <select id="findEfunctionByFid" resultMap="BaseResultMap">
+    SELECT DISTINCT fid, fcode, fname, furl, flevel, fparentid, fremark1, fremark2, fremark3 FROM efunction
+    WHERE fid = #{fid};
+  </select>
+
+  <update id="updateStateByFid">
+    update efunction
+    set fremark2 = #{state}
+    where fid = #{fid}
+  </update>
+
+</mapper>

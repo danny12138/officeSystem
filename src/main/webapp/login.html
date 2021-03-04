@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Office System | login</title>
+  <!-- 告诉浏览器该页面是自适应布局 -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- Bootstrap 3.3.7 -->
+  <link rel="stylesheet" href="AdminLTE/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="AdminLTE/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="AdminLTE/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="AdminLTE/css/AdminLTE.min.css">
+  <!-- iCheck -->
+  <link rel="stylesheet" href="AdminLTE/css/blue.css">
+  <!-- Google Font -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+</head>
+<body class="hold-transition login-page">
+<div class="login-box">
+  <div class="login-logo">
+    <a href="login.html"><b>Office</b>&nbsp;System</a>
+  </div>
+  <!-- /.login-logo -->
+  <div class="login-box-body">
+    <p class="login-box-msg">用户登录</p>
+    <div class="form-group has-feedback">
+      <input type="text" class="form-control" id="ejobno" name="ejobno" placeholder="账号">
+      <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+    </div>
+    <div class="form-group has-feedback">
+      <input type="password" class="form-control" id="epassword" name="epassword" placeholder="密码">
+      <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+    </div>
+    <div class="row">
+      <!-- /.col -->
+      <div class="col-xs-6">
+        <button type="button" onclick="submitForm()" class="btn btn-primary btn-block btn-flat">登录</button>
+      </div>
+      <!-- /.col -->
+      <div class="col-xs-6">
+        <button type="button" onclick="clearForm()" class="btn btn-primary btn-block btn-flat">取消</button>
+      </div>
+    </div>
+  </div>
+  <!-- /.login-box-body -->
+</div>
+<!-- /.login-box -->
+
+<!-- jQuery 3 -->
+<script src="AdminLTE/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="AdminLTE/js/bootstrap.min.js"></script>
+
+<!-- 登录 -->
+<script type="text/javascript">
+  //使用ajax登录校验
+  function submitForm() {
+    if ($('#ejobno').val() === "" || $('#epassword').val === "") {
+      alert("账号或密码不能为空, 请重新输入!")
+    } else {
+      $.ajax({
+        url: "/employee/loginCheck",
+        type: "post",
+        data: {'ejobno': $('#ejobno').val(), 'epassword': $('#epassword').val()}
+      }).done(function (obj) {
+        alert(obj.message);
+        if (obj.success) {
+          if (obj.loginSuccess) {
+            //传递当前成功登录对象到下一个页面
+            //localStorage.setItem("currentEmployee", JSON.stringify(obj.employee));
+            window.location.href = "/index.html";
+          } else {
+            window.location.reload();
+          }
+        } else {
+          window.location.reload();
+        }
+      });
+    }
+  }
+  //文本框清零
+  function clearForm(){
+    $('#ejobno').val('');
+    $('#epassword').val('');
+  }
+</script>
+</body>
+</html>

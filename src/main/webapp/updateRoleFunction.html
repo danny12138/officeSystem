@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="AdminLTE/plugins/fontawesome-free/css/all.min.css">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="AdminLTE/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="AdminLTE/dist/css/adminlte.min.css">
+    <title>修改角色功能</title>
+    <style>
+        li ul{
+            list-style:none;
+        }
+    </style>
+
+</head>
+<body>
+<form role="form">
+    <div class="card-body" style="width: 450px; margin:0 auto;">
+        <h2>角色功能权限修改</h2>
+        <br/>
+        <div class="form-group">
+            <label>角色ID</label>
+            <input type="text" class="form-control" id="rid" placeholder="" disabled>
+        </div>
+        <div class="form-group">
+            <label>角色编码</label>
+            <input type="text" class="form-control" id="rcode" placeholder="" disabled>
+        </div>
+        <div class="form-group">
+            <label>角色名称</label>
+            <input type="text" class="form-control" id="rname" placeholder="" disabled>
+        </div>
+        <div class="form-group">
+            <label>角色功能</label>
+            <ul id="menutree" class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview"
+                role="menu" data-accordion="false">
+            </ul>
+        </div>
+        <br/>
+        <div>
+            <button type="button" class="btn btn-primary" onclick="updateRoleFunctions()">提交</button>
+            <button type="button" class="btn btn-primary" onclick="resetRoleFunctions()">还原</button>
+            <button type="button" class="btn btn-primary" onclick="clearRoleFunctions()">清空</button>
+        </div>
+    </div>
+    <!-- /.card-body -->
+
+</form>
+
+<!-- jQuery -->
+<script src="AdminLTE/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap -->
+<script src="AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- overlayScrollbars -->
+<script src="AdminLTE/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+<!-- AdminLTE App -->
+<script src="AdminLTE/dist/js/adminlte.js"></script>
+<!-- menu -->
+<script src="AdminLTE/plugins/menu.js"></script>
+<script>
+    //从登陆页面获取当前用户信息
+    var currentRole = JSON.parse(localStorage.getItem("currentRole"));
+    //构建菜单
+    $.ajax({
+        url: "role/getAllFunctions",
+        datatype: "json"//数据类型
+    }).done(function (result) {
+        $("#rid").attr("placeholder",currentRole.rid);
+        $("#rcode").attr("placeholder",currentRole.rcode);
+        $("#rname").attr("placeholder",currentRole.rname);
+        menuTree(result, $('#menutree').get(0));
+    });
+
+    var getRoleFunctions = function () {
+        var result;
+        $.ajax({
+            url: "role/getRoleFunctions?rid="+currentRole.rid, //表示提交给的action
+            datatype: "json"
+        }).done(function (data) {
+            result = data.roleFunctions;
+            //预选该角色已有的权限
+            $.each(result,function (i,item) {
+                $("#"+item.fid).attr("checked","checked");
+            });
+        });
+        return result;
+    };
+    getRoleFunctions();
+    var checkBoxes=(function (fid){
+        $("#"+fid).attr("checked","checked");
+    });
+
+    var updateRoleFunctions=(function () {
+        //记录多选框选中的fid
+        var selectedItems = $('input[type=checkbox]:checked').map(function(){return this.id}).get().join(',');
+        //springMVC 传数组到后端教程
+        //https://www.cnblogs.com/hafiz/p/5498936.html
+        $.ajax({
+            type: "GET",
+            url: "/role/updateRoleFunction?rid="+currentRole.rid,
+            datatype: "json",
+            data: {"data[]":selectedItems}
+        }).done(function (response) {
+            //alert(selectedItems);
+            if (response.success){
+                var cf = confirm(response.message+"\r是否返回主页?");
+                if (cf) {
+                    parent.window.location.href = "index.html";
+                } else {
+                    window.location.reload();
+                }
+            }
+            else {
+                alert(response.message);
+                window.location.reload();
+            }
+        }).fail(function (e) {
+            alert("更新异常,请稍后再试!");
+            window.location.reload();
+        });
+
+    });
+
+    var resetRoleFunctions=(function () {
+        window.location.reload();
+    });
+
+    var clearRoleFunctions=(function () {
+        $('input[type=checkbox]').prop("checked",false);
+    })
+
+    /* 重写该方法,因为原来封装的函数里没有配置checkbox
+     * @构建树形菜单
+     * @arrJson:json数据
+     * @container:菜单容器
+     */
+    function menuTree(jsonArr,container){
+        for(var i = 0 ;i < jsonArr.length; i++){
+            var oLi = document.createElement('li');
+            var onClick = jsonArr[i].children ? "rootOnclick("+jsonArr[i].fid+");" : "leafOnclick("+jsonArr[i].fid+");" ;
+            var checkbox ='<input type="checkbox" name="roleFunction" value='+jsonArr[i].text+' id='+jsonArr[i].fid+'>&nbsp;';
+            var inHt ='<a href="javascript:void(0);" onclick="'+onClick+'" class="nav-link">'+checkbox+'<i class="'+jsonArr[i].icon+'"></i>';
+            if(jsonArr[i].children){//遇到是某级别根节点
+                var open = jsonArr[i].open || "";
+                $(oLi).addClass("nav-item has-treeview "+open);
+                inHt +='<p>'+jsonArr[i].text+' &nbsp;<span class="arrowBtn"><i class="right fas fa-angle-left"></i></span></p></a>';
+                oLi.innerHTML =inHt;
+                var oUl = document.createElement('ul');
+                // $(oUl).addClass("nav nav-treeview");
+                oLi.appendChild(oUl);
+                menuTree(jsonArr[i].children,oUl);//递归构建子菜单
+            }else{
+                $(oLi).addClass("nav-item");
+                inHt +='<p>'+jsonArr[i].text+'</p></div>';
+                oLi.innerHTML = inHt;
+            }
+            container.appendChild(oLi);
+        }
+    }
+    //点击父节点后的事件
+    function rootOnclick(fid){
+        //获取该父节点下的所有子节点的fid
+        var status = $("#"+fid).prop("checked");
+        $.ajax({
+            url: "function/findChildrenIdByFid?fid=" + fid, //表示提交给的action
+            datatype: "json"
+        }).done(function (data) {
+            var result = data.childrenIdByFid;
+            //如果父类没选中子类全不选
+            $.each(result, function (i, item) {
+                $("#" + item).prop("checked", status);
+            });
+        });
+    }
+    //点击子节点后的事件
+    function leafOnclick(fid) {
+        //如果子节点选中,父节点或祖父节点也要选中
+        var status = $("#" + fid).prop("checked");
+        if (status) {
+            $.ajax({
+                url: "function/findAllParentIdsByFid?fid=" + fid, //表示提交给的action
+                datatype: "json"
+            }).done(function (data) {
+                var result = data.allParentIdsByFid;
+                //如果其中一个子类选中,父类也要选中
+                $.each(result,function (i,item) {
+                    $("#" + item).prop("checked", true);
+                });
+            });
+        }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       
+https://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/aop 
+https://www.springframework.org/schema/aop/spring-aop.xsd
+http://www.springframework.org/schema/tx
+https://www.springframework.org/schema/tx/spring-tx.xsd
+http://www.springframework.org/schema/context 
+https://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- Shiro的Web过滤器 -->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"/>
+        <!-- 指定未认证跳转页面 -->
+        <property name="loginUrl" value="/login.html"/>
+        <!-- 指定未授权跳转页面 -->
+        <property name="unauthorizedUrl" value="/login.html"/>
+        <!-- 自定义过滤器 -->
+<!--        <property name="filters">-->
+<!--            <util:map>-->
+<!--                <entry key="authc" value-ref="formAuthenticationFilter"/>-->
+<!--            </util:map>-->
+<!--        </property>-->
+        <!-- 过滤器链的自定义 -->
+        <property name="filterChainDefinitions">
+            <value>
+                <!-- 释放不需要登录校验 -->
+<!--                /functionList.html = authc, roles[001]-->
+                /functionList.html = authc, perms[004]
+                /AdminLTE/** = anon
+                /zTree/** = anon
+                /login.html = anon
+                /employee/loginCheck = anon
+                /** = authc
+            </value>
+        </property>
+    </bean>
+
+
+    <!-- 安全管理器 -->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="myRealm"/>
+<!--        <property name="sessionManager" ref="sessionManager"/>-->
+<!--        <property name="cacheManager" ref="cacheManager"/>-->
+    </bean>
+
+    <bean id="myRealm" class="com.danny.realm.EmployeeRealm">
+        <property name="credentialsMatcher">
+            <bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+                <!--指定校验时使用的算法名称-->
+                <property name="hashAlgorithmName" value="MD5"/>
+                <!--指定校验时迭代次数-->
+                <property name="hashIterations" value="3"/>
+            </bean>
+        </property>
+    </bean>
+</beans>

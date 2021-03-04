@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.danny.dao.EmployeeMapper">
+  <resultMap id="BaseResultMap" type="com.danny.bean.Employee">
+    <constructor>
+      <idArg column="eid" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="ename" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="esex" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="eage" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="ephoneno" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="ehiredate" javaType="java.util.Date" jdbcType="DATE" />
+      <arg column="ejobno" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="epassword" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="eremark1" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="eremark2" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="eremark3" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    eid, ename, esex, eage, ephoneno, ehiredate, ejobno, epassword, eremark1, eremark2, 
+    eremark3
+  </sql>
+  <select id="selectByExample" parameterType="com.danny.bean.EmployeeExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from employee
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from employee
+    where eid = #{eid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from employee
+    where eid = #{eid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.danny.bean.EmployeeExample">
+    delete from employee
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.danny.bean.Employee">
+    insert into employee (eid, ename, esex, 
+      eage, ephoneno, ehiredate, 
+      ejobno, epassword, eremark1, 
+      eremark2, eremark3)
+    values (default, #{ename,jdbcType=VARCHAR}, #{esex,jdbcType=INTEGER},
+      #{eage,jdbcType=INTEGER}, #{ephoneno,jdbcType=VARCHAR}, #{ehiredate,jdbcType=DATE}, 
+      #{ejobno,jdbcType=VARCHAR}, #{epassword,jdbcType=VARCHAR}, #{eremark1,jdbcType=VARCHAR}, 
+      #{eremark2,jdbcType=VARCHAR}, #{eremark3,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.danny.bean.Employee">
+    insert into employee
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="eid != null">
+        eid,
+      </if>
+      <if test="ename != null">
+        ename,
+      </if>
+      <if test="esex != null">
+        esex,
+      </if>
+      <if test="eage != null">
+        eage,
+      </if>
+      <if test="ephoneno != null">
+        ephoneno,
+      </if>
+      <if test="ehiredate != null">
+        ehiredate,
+      </if>
+      <if test="ejobno != null">
+        ejobno,
+      </if>
+      <if test="epassword != null">
+        epassword,
+      </if>
+      <if test="eremark1 != null">
+        eremark1,
+      </if>
+      <if test="eremark2 != null">
+        eremark2,
+      </if>
+      <if test="eremark3 != null">
+        eremark3,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="eid != null">
+        #{eid,jdbcType=INTEGER},
+      </if>
+      <if test="ename != null">
+        #{ename,jdbcType=VARCHAR},
+      </if>
+      <if test="esex != null">
+        #{esex,jdbcType=INTEGER},
+      </if>
+      <if test="eage != null">
+        #{eage,jdbcType=INTEGER},
+      </if>
+      <if test="ephoneno != null">
+        #{ephoneno,jdbcType=VARCHAR},
+      </if>
+      <if test="ehiredate != null">
+        #{ehiredate,jdbcType=DATE},
+      </if>
+      <if test="ejobno != null">
+        #{ejobno,jdbcType=VARCHAR},
+      </if>
+      <if test="epassword != null">
+        #{epassword,jdbcType=VARCHAR},
+      </if>
+      <if test="eremark1 != null">
+        #{eremark1,jdbcType=VARCHAR},
+      </if>
+      <if test="eremark2 != null">
+        #{eremark2,jdbcType=VARCHAR},
+      </if>
+      <if test="eremark3 != null">
+        #{eremark3,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.danny.bean.EmployeeExample" resultType="java.lang.Long">
+    select count(*) from employee
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update employee
+    <set>
+      <if test="record.eid != null">
+        eid = #{record.eid,jdbcType=INTEGER},
+      </if>
+      <if test="record.ename != null">
+        ename = #{record.ename,jdbcType=VARCHAR},
+      </if>
+      <if test="record.esex != null">
+        esex = #{record.esex,jdbcType=INTEGER},
+      </if>
+      <if test="record.eage != null">
+        eage = #{record.eage,jdbcType=INTEGER},
+      </if>
+      <if test="record.ephoneno != null">
+        ephoneno = #{record.ephoneno,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ehiredate != null">
+        ehiredate = #{record.ehiredate,jdbcType=DATE},
+      </if>
+      <if test="record.ejobno != null">
+        ejobno = #{record.ejobno,jdbcType=VARCHAR},
+      </if>
+      <if test="record.epassword != null">
+        epassword = #{record.epassword,jdbcType=VARCHAR},
+      </if>
+      <if test="record.eremark1 != null">
+        eremark1 = #{record.eremark1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.eremark2 != null">
+        eremark2 = #{record.eremark2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.eremark3 != null">
+        eremark3 = #{record.eremark3,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update employee
+    set eid = #{record.eid,jdbcType=INTEGER},
+      ename = #{record.ename,jdbcType=VARCHAR},
+      esex = #{record.esex,jdbcType=INTEGER},
+      eage = #{record.eage,jdbcType=INTEGER},
+      ephoneno = #{record.ephoneno,jdbcType=VARCHAR},
+      ehiredate = #{record.ehiredate,jdbcType=DATE},
+      ejobno = #{record.ejobno,jdbcType=VARCHAR},
+      epassword = #{record.epassword,jdbcType=VARCHAR},
+      eremark1 = #{record.eremark1,jdbcType=VARCHAR},
+      eremark2 = #{record.eremark2,jdbcType=VARCHAR},
+      eremark3 = #{record.eremark3,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.danny.bean.Employee">
+    update employee
+    <set>
+      <if test="ename != null">
+        ename = #{ename,jdbcType=VARCHAR},
+      </if>
+      <if test="esex != null">
+        esex = #{esex,jdbcType=INTEGER},
+      </if>
+      <if test="eage != null">
+        eage = #{eage,jdbcType=INTEGER},
+      </if>
+      <if test="ephoneno != null">
+        ephoneno = #{ephoneno,jdbcType=VARCHAR},
+      </if>
+      <if test="ehiredate != null">
+        ehiredate = #{ehiredate,jdbcType=DATE},
+      </if>
+      <if test="ejobno != null">
+        ejobno = #{ejobno,jdbcType=VARCHAR},
+      </if>
+      <if test="epassword != null">
+        epassword = #{epassword,jdbcType=VARCHAR},
+      </if>
+      <if test="eremark1 != null">
+        eremark1 = #{eremark1,jdbcType=VARCHAR},
+      </if>
+      <if test="eremark2 != null">
+        eremark2 = #{eremark2,jdbcType=VARCHAR},
+      </if>
+      <if test="eremark3 != null">
+        eremark3 = #{eremark3,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where eid = #{eid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.danny.bean.Employee">
+    update employee
+    set ename = #{ename,jdbcType=VARCHAR},
+      esex = #{esex,jdbcType=INTEGER},
+      eage = #{eage,jdbcType=INTEGER},
+      ephoneno = #{ephoneno,jdbcType=VARCHAR},
+      ehiredate = #{ehiredate,jdbcType=DATE},
+      ejobno = #{ejobno,jdbcType=VARCHAR},
+      epassword = #{epassword,jdbcType=VARCHAR},
+      eremark1 = #{eremark1,jdbcType=VARCHAR},
+      eremark2 = #{eremark2,jdbcType=VARCHAR},
+      eremark3 = #{eremark3,jdbcType=VARCHAR}
+    where eid = #{eid,jdbcType=INTEGER}
+  </update>
+
+  <sql id="selectAll">SELECT eid, ename, esex, eage, ephoneno, ehiredate, ejobno, epassword, eremark1, eremark2, eremark3 FROM employee</sql>
+
+  <select id="findEmployeesByCondition" resultMap="BaseResultMap">
+    <include refid="selectAll"/>
+    <where>
+    <if test="ename!=null">
+      ename like concat('%',#{ename},'%')
+    </if>
+    <if test="esex!=-1">
+      and esex = #{esex}
+    </if>
+    <if test="ephoneno!=null">
+      and ephoneno like concat('%',#{ephoneno},'%')
+    </if>
+    <if test="eage!=null">
+      and eage = #{eage}
+    </if>
+    <if test="ejobno!=null">
+      and ejobno like concat('%',#{ejobno},'%')
+    </if>
+     order by ${sortField} ${sortOrder}
+     <if test="pageSize!=-1">
+     limit #{pageIndex},#{pageSize}
+     </if>
+    </where>
+  </select>
+<!--  order by 使用 #{}不会生效-->
+
+  <select id="countEmployeesByCondition" resultType="_int">
+    SELECT count(e.eid)
+    FROM employee e
+    <where>
+      <if test="ename!=null">
+        ename like concat('%',#{ename},'%')
+      </if>
+      <if test="esex!=-1">
+        and esex = #{esex}
+      </if>
+      <if test="ephoneno!=null">
+        and ephoneno like concat('%',#{ephoneno},'%')
+      </if>
+      <if test="eage!=null">
+        and eage = #{eage}
+      </if>
+      <if test="ejobno!=null">
+        and ejobno like concat('%',#{ejobno},'%')
+      </if>
+    </where>
+  </select>
+
+
+<!--  <resultMap id="employeeRolesResultMap" type="com.danny.bean.Employee">-->
+<!--    <constructor>-->
+<!--      <idArg column="eid" javaType="java.lang.Integer" jdbcType="INTEGER" />-->
+<!--      <arg column="ename" javaType="java.lang.String" jdbcType="VARCHAR" />-->
+<!--      <arg column="esex" javaType="java.lang.Integer" jdbcType="INTEGER" />-->
+<!--      <arg column="eage" javaType="java.lang.Integer" jdbcType="INTEGER" />-->
+<!--      <arg column="ephoneno" javaType="java.lang.String" jdbcType="VARCHAR" />-->
+<!--      <arg column="ehiredate" javaType="java.util.Date" jdbcType="DATE" />-->
+<!--      <arg column="ejobno" javaType="java.lang.String" jdbcType="VARCHAR" />-->
+<!--      <arg column="epassword" javaType="java.lang.String" jdbcType="VARCHAR" />-->
+<!--      <arg column="eremark1" javaType="java.lang.String" jdbcType="VARCHAR" />-->
+<!--      <arg column="eremark2" javaType="java.lang.String" jdbcType="VARCHAR" />-->
+<!--      <arg column="eremark3" javaType="java.lang.String" jdbcType="VARCHAR" />-->
+<!--    </constructor>-->
+<!--    <collection property="roleList" ofType="com.danny.bean.Role">-->
+<!--      <id property="rid" column="rid"/>-->
+<!--      <result property="rcode" column="rcode"/>-->
+<!--      <result property="rname" column="rname"/>-->
+<!--    </collection>-->
+<!--  </resultMap>-->
+<!--  <select id="findEmployeesByCondition" resultMap="employeeRolesResultMap">-->
+<!--    SELECT e.eid, e.ename, e.esex, e.eage, e.ephoneno, e.ehiredate, e.ejobno, e.epassword, e.eremark1, e.eremark2, e.eremark3-->
+<!--    FROM employee e-->
+<!--    <where>-->
+<!--      <if test="ename!=null">-->
+<!--        e.ename like concat('%',#{ename},'%')-->
+<!--      </if>-->
+<!--      <if test="esex!=-1">-->
+<!--        and e.esex = #{esex}-->
+<!--      </if>-->
+<!--      <if test="ephoneno!=null">-->
+<!--        and e.ephoneno like concat('%',#{ephoneno},'%')-->
+<!--      </if>-->
+<!--      <if test="eage!=null">-->
+<!--        and e.eage = #{eage}-->
+<!--      </if>-->
+<!--      <if test="ejobno!=null">-->
+<!--        and e.ejobno like concat('%',#{ejobno},'%')-->
+<!--      </if>-->
+<!--      order by ${sortField} ${sortOrder}-->
+<!--      <if test="pageSize!=-1">-->
+<!--        limit #{pageIndex},#{pageSize}-->
+<!--      </if>-->
+<!--    </where>-->
+<!--  </select>-->
+
+  <update id="updatePassword" parameterType="com.danny.bean.Employee">
+    update employee
+    set epassword = #{newPassword,jdbcType=VARCHAR},
+        eremark1 = #{salt,jdbcType=VARCHAR}
+    where eid = #{current_eid,jdbcType=INTEGER}
+  </update>
+
+</mapper>

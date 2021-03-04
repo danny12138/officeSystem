@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       
+https://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/mvc
+https://www.springframework.org/schema/mvc/spring-mvc.xsd
+http://www.springframework.org/schema/context 
+https://www.springframework.org/schema/context/spring-context.xsd">
+    <context:component-scan base-package="com.danny.controller">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <mvc:annotation-driven/>
+    <mvc:default-servlet-handler/>
+
+    <!--注册自定义类型转换器-->
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <property name="converters">
+            <set>
+                <bean class="com.danny.util.MyDateConverter"></bean>
+            </set>
+        </property>
+    </bean>
+    <!--默认会创建多种处理器映射器和处理器适配器,和注解解析对象实例-->
+    <mvc:annotation-driven conversion-service="conversionService"></mvc:annotation-driven>
+
+</beans>
