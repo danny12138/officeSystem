@@ -309,7 +309,7 @@
                 {name:'furl',type:'text',title:'功能链接',width:130, align: "center"},
                 {name:'flevel',type:'select',title:'功能等级', width:80, items: flevelArr, valueField: "Id", textField: "Name" ,selectedIndex:-1, align: "center",
                     //切换新增或修改模式,两个id不一样,根据参数type切换
-                    myCreateSelect: function(type) {
+                    _createSelect: function(type) {
                         var $result = $("<select>");
                         if(type === "edit"){
                             $result.attr("onchange","changeFLevel(this,'edit')");
@@ -339,7 +339,7 @@
                         if(!this.inserting)
                             return "";
 
-                        return this.insertControl = this.myCreateSelect("insert");
+                        return this.insertControl = this._createSelect("insert");
                     },
                     editTemplate: function(value) {
                         //传递进入编辑模式时的功能等级
@@ -347,7 +347,7 @@
                         if(!this.editing)
                             return this.itemTemplate.apply(this, arguments);
 
-                        var $result = this.editControl = this.myCreateSelect("edit");
+                        var $result = this.editControl = this._createSelect("edit");
                         (value !== undefined) && $result.val(value);
                         return $result;
                     }
@@ -357,7 +357,7 @@
                         if(!this.editing)
                             return this.itemTemplate.apply(this, arguments);
 
-                        var $result = this.editControl = this.MyCreateSelect("edit");
+                        var $result = this.editControl = this._createSelect("edit");
                         (value !== undefined) && $result.val(value);
                         return $result;
                     },
@@ -365,11 +365,11 @@
                         if(!this.inserting)
                             return "";
 
-                        return this.insertControl = this.MyCreateSelect("insert");
+                        return this.insertControl = this._createSelect("insert");
                     },
                     //自定义编辑模式下的下拉框
                     //切换新增或修改模式,两个id不一样,根据参数type切换
-                    MyCreateSelect: function(type) {
+                    _createSelect: function(type) {
                         var $result = $("<select>");
                         if (type === "edit"){
                             $result.prop("id","currentSelect");
