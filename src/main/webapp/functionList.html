@@ -357,7 +357,7 @@
                         if(!this.editing)
                             return this.itemTemplate.apply(this, arguments);
 
-                        var $result = this.editControl = this._createSelect("edit");
+                        var $result = this.editControl = this.createSelect("edit");
                         (value !== undefined) && $result.val(value);
                         return $result;
                     },
@@ -365,11 +365,11 @@
                         if(!this.inserting)
                             return "";
 
-                        return this.insertControl = this._createSelect("insert");
+                        return this.insertControl = this.createSelect("insert");
                     },
                     //自定义编辑模式下的下拉框
                     //切换新增或修改模式,两个id不一样,根据参数type切换
-                    _createSelect: function(type) {
+                    createSelect: function(type) {
                         var $result = $("<select>");
                         if (type === "edit"){
                             $result.prop("id","currentSelect");
